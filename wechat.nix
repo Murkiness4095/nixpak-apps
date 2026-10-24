@@ -22,6 +22,7 @@
           { sloth, ... }:
           {
             imports = [ ./common.nix ];
+            app.binPath = "bin/wechat";
             app.package = pkgs.wechat;
             flatpak.appId = appId;
 
