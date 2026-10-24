@@ -1,7 +1,8 @@
 # nixpak sandboxes
 
 基于 [nixpak](https://github.com/nixpak/nixpak)（bubblewrap + xdg-dbus-proxy）的桌面应用沙盒。
-入口：`nix run .#<app>`。
+本地入口：`nix run .#<app>`。
+不克隆直接体验：`nix run github:Murkiness4095/nixpak-apps#<app>`（远端缓存旧时加 `--refresh`）。
 
 当前包含：
 
