@@ -49,6 +49,9 @@
 
             flatpak.appId = appId;
 
+            # Nheko 用 libsecret 保存加密密钥；需要访问宿主 Secret Service
+            dbus.policies."org.freedesktop.secrets" = "talk";
+
             bubblewrap = {
               env = {
               };
