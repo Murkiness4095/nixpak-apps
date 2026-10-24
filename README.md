@@ -1,7 +1,8 @@
 # nixpak sandboxes
 
 基于 [nixpak](https://github.com/nixpak/nixpak)（bubblewrap + xdg-dbus-proxy）的桌面应用沙盒。
-入口：`nix run .#<app>`。
+本地入口：`nix run .#<app>`。
+不克隆直接体验：`nix run github:Murkiness4095/nixpak-apps#<app>`（远端缓存旧时加 `--refresh`）。
 
 当前包含：
 
@@ -58,7 +59,7 @@ unwrapped/dingtalk.nix # 钉钉原始打包（deb -> 应用树）
 
 | 应用 | appId | 数据路径 |
 |---|---|---|
-| 微信 | `com.tencent.WeChat` | `~/.var/app/com.tencent.WeChat/{xwechat,Downloads}` |
+| 微信 | `com.tencent.WeChat` | `~/.var/app/com.tencent.WeChat/xwechat` |
 | 微信 UOS | `com.tencent.WeChatUOS` | `~/.var/app/com.tencent.WeChatUOS/{xwechat,xwechat_files,config,data,cache}` |
 | QQ | `com.tencent.QQ` | `~/.var/app/com.tencent.QQ/config/QQ` |
 | 钉钉 | `com.alibabainc.dingtalk` | `~/.var/app/com.alibabainc.dingtalk/config/{DingTalk,com.alibabainc.dingtalk}` |
@@ -67,7 +68,6 @@ unwrapped/dingtalk.nix # 钉钉原始打包（deb -> 应用树）
 | Nheko | `io.github.NhekoReborn.Nheko` | `~/.var/app/io.github.NhekoReborn.Nheko/{config,data,cache}` |
 | Vesktop | `dev.vencord.Vesktop` | `~/.var/app/dev.vencord.Vesktop/config/{vesktop,discord}` |
 
-微信（主实例）的 Downloads 仍在 var 内；其它应用的下载目录指向宿主 `~/Downloads`。
 
 ## 托盘
 

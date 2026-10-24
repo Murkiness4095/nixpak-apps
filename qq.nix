@@ -107,6 +107,7 @@
           { sloth, ... }:
           {
             imports = [ ./common.nix ];
+            app.binPath = "bin/qq";
             app.package = qqPatched;
             flatpak.appId = appId;
 
