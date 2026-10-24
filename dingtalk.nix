@@ -175,7 +175,8 @@ EOF
       '';
     in
     pkgs.buildEnv {
-      inherit (wrapped.config.script) name meta passthru;
+      inherit (wrapped.config.script) name passthru;
+        meta = (wrapped.config.script.meta or { }) // { mainProgram = "dingtalk"; };
       paths = [
         launcher
         (pkgs.makeDesktopItem {
