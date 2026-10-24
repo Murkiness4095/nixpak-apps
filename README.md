@@ -101,5 +101,6 @@ QQ / Nheko / UOS 是否显示托盘还取决于应用自己的设置（QQ 设置
 ## 维护
 
 - 新增应用：复制一个模块，`imports = [ ./common.nix ];`，只写差异。
+- `packages.<app>` 都设置了 `meta.mainProgram`，`nix run .#<app>` 可直接启动；新增应用时保持与 `app.binPath` 的可执行文件名一致。
 - 调字体：改 `lib/fonts.nix` 或应用里 `fonts.mk` 参数。
 - 升级钉钉：改 `unwrapped/dingtalk.nix` 的 `sources`。

@@ -84,7 +84,8 @@
     in
     {
       packages.vesktop = pkgs.buildEnv {
-        inherit (wrapped.config.script) name meta passthru;
+        inherit (wrapped.config.script) name passthru;
+        meta = (wrapped.config.script.meta or { }) // { mainProgram = "vesktop"; };
         paths = [
           wrapped.config.script
           (pkgs.makeDesktopItem {

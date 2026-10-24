@@ -75,7 +75,8 @@
     in
     {
       packages.wechat = pkgs.buildEnv {
-        inherit (wrapped.config.script) name meta passthru;
+        inherit (wrapped.config.script) name passthru;
+        meta = (wrapped.config.script.meta or { }) // { mainProgram = "wechat"; };
         paths = [
           wrapped.config.script
           (pkgs.makeDesktopItem {

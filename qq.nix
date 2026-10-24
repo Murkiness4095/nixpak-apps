@@ -146,7 +146,8 @@
     in
     {
       packages.qq = pkgs.buildEnv {
-        inherit (wrapped.config.script) name meta passthru;
+        inherit (wrapped.config.script) name passthru;
+        meta = (wrapped.config.script.meta or { }) // { mainProgram = "qq"; };
         paths = [
           wrapped.config.script
           (pkgs.makeDesktopItem {
