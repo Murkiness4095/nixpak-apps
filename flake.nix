@@ -1,5 +1,5 @@
 {
-  description = "nixpak-sandboxed WeChat";
+  description = "nixpak-sandboxed apps";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
