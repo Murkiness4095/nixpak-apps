@@ -56,6 +56,16 @@
               ];
 
               bind.ro = [
+                # fcitx5-qt 的客户端候选框会读沙盒内 ~/.config/fcitx5 和主题目录；
+                # 不绑的话 Qt 应用会回退到 default 灰色主题
+                [
+                  (sloth.concat' sloth.homeDir "/.config/fcitx5")
+                  (sloth.concat' sloth.xdgConfigHome "/fcitx5")
+                ]
+                [
+                  (sloth.concat' sloth.homeDir "/.local/share/fcitx5/themes")
+                  (sloth.concat' sloth.xdgDataHome "/fcitx5/themes")
+                ]
                 # Telegram 不自带字体，也不再用自定义字体集；必须给宿主系统字体
                 "/etc/fonts"
                 "/run/current-system/sw/share/fonts"

@@ -56,6 +56,16 @@
               ];
 
               bind.ro = [
+                # fcitx5-qt 的客户端候选框会读沙盒内 ~/.config/fcitx5 和主题目录；
+                # 不绑的话 Qt 应用会回退到 default 灰色主题
+                [
+                  (sloth.concat' sloth.homeDir "/.config/fcitx5")
+                  (sloth.concat' sloth.xdgConfigHome "/fcitx5")
+                ]
+                [
+                  (sloth.concat' sloth.homeDir "/.local/share/fcitx5/themes")
+                  (sloth.concat' sloth.xdgDataHome "/fcitx5/themes")
+                ]
                 (sloth.concat' sloth.xdgConfigHome "/kdeglobals")
                 (sloth.concat' sloth.xdgConfigHome "/gtk-2-0")
                 (sloth.concat' sloth.xdgConfigHome "/gtk-3.0")
