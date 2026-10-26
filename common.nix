@@ -166,6 +166,8 @@ if args ? self then { } else {
       sockets = {
         wayland = mkDefault true;
         pipewire = mkDefault true;
+        # 微信/UOS 走 PulseAudio 兼容层；只给 pipewire socket 时语音无声
+        pulse = mkDefault true;
         # 严格 Wayland：不挂任何 X11 socket（nixpak 默认也是 false，这里显式写出）
         x11 = mkDefault false;
       };
