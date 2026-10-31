@@ -20,6 +20,7 @@
         ./telegram.nix
         ./nheko.nix
         ./wechat-uos.nix
+        ./heroic.nix
         ./vesktop.nix
       ];
     };
