@@ -54,7 +54,26 @@
             dbus.policies."org.freedesktop.secrets" = "talk";
 
             bubblewrap = {
+              extraStorePaths = [
+                pkgs.gst_all_1.gstreamer
+                pkgs.gst_all_1.gst-plugins-base
+                pkgs.gst_all_1.gst-plugins-good
+                pkgs.gst_all_1.gst-plugins-bad
+                pkgs.gst_all_1.gst-plugins-ugly
+                pkgs.gst_all_1.gst-libav
+                pkgs.pipewire
+              ];
+
               env = {
+                GST_PLUGIN_SYSTEM_PATH_1_0 = pkgs.lib.makeSearchPath "lib/gstreamer-1.0" [
+                  pkgs.gst_all_1.gstreamer
+                  pkgs.gst_all_1.gst-plugins-base
+                  pkgs.gst_all_1.gst-plugins-good
+                  pkgs.gst_all_1.gst-plugins-bad
+                  pkgs.gst_all_1.gst-plugins-ugly
+                  pkgs.gst_all_1.gst-libav
+                pkgs.pipewire
+                ];
               };
 
               bind.rw = with sloth; [
