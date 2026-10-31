@@ -21,6 +21,7 @@
         ./nheko.nix
         ./wechat-uos.nix
         ./heroic.nix
+        ./bottles.nix
         ./vesktop.nix
       ];
     };
