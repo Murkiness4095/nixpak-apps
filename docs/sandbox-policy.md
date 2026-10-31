@@ -53,14 +53,6 @@
 5. 加入 `flake.nix` 的 `imports` 和 `README.md` 表格。
 6. 构建验证：`nix build .#<app>`；能运行则再 `nix run .#<app>`。
 
-## 包选择
-
-| 应用 | 包 | 原因 |
-|---|---|---|
-| Heroic | `heroic-unwrapped` | nixpak 自己就是 wrapper，不需要 Steam runtime 包装 |
-| Bottles | `bottles-unwrapped` | 避免 FHS wrapper 与 bwrap 叠加 |
-| Lutris | `lutris` | nixpkgs 的 Lutris 入口 |
-
 ## 已知限制
 
 - xdg-dbus-proxy 不支持通配符，托盘 SNI 只能逐 PID 放行。
