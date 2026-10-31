@@ -72,9 +72,16 @@
                 "/etc/zoneinfo"
                 "/run/opengl-driver-32"
                 "/sys"
+                "/run/current-system/sw/share/themes"
+                (sloth.concat' sloth.xdgConfigHome "/gtk-3.0")
+                (sloth.concat' sloth.xdgConfigHome "/gtk-4.0")
+                (sloth.concat' sloth.xdgConfigHome "/dconf")
               ];
 
               env = {
+                GTK_THEME = "Adwaita:dark";
+                GTK_APPLICATION_PREFER_DARK_THEME = "1";
+                GDK_BACKEND = "wayland";
                 GTK_IM_MODULE = "";
                 QT_IM_MODULE = "";
                 XMODIFIERS = "";
