@@ -20,7 +20,9 @@
         ./telegram.nix
         ./nheko.nix
         ./wechat-uos.nix
-        ./vesktop.nix
+        ./heroic.nix
+        ./bottles.nix
+        ./lutris.nix
       ];
     };
 }

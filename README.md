@@ -1,8 +1,22 @@
 # nixpak sandboxes
 
 基于 [nixpak](https://github.com/nixpak/nixpak)（bubblewrap + xdg-dbus-proxy）的桌面应用沙盒。
-本地入口：`nix run .#<app>`。
-不克隆直接体验：`nix run github:Murkiness4095/nixpak-apps#<app>`（远端缓存旧时加 `--refresh`）。
+
+## 运行
+
+本地：
+
+```bash
+nix run .#<app>
+```
+
+不克隆直接体验：
+
+```bash
+nix run github:Murkiness4095/nixpak-apps#<app>
+```
+
+远端缓存旧时加 `--refresh`。
 
 当前包含：
 
@@ -15,7 +29,9 @@
 | `feishu` | 飞书 |
 | `telegram` | Telegram Desktop |
 | `nheko` | Nheko（Matrix） |
-| `vesktop` | Vesktop（Discord 第三方客户端） |
+| `heroic` | Heroic Games Launcher（GOG/Epic/Amazon，沙盒） |
+| `bottles` | Bottles（Wine 前缀管理，沙盒） |
+| `lutris` | Lutris（游戏管理，沙盒） |
 
 ## 结构
 
@@ -99,6 +115,8 @@ QQ / Nheko / UOS 是否显示托盘还取决于应用自己的设置（QQ 设置
 6. **钉钉**：Linux 版只有浅色主题。
 
 ## 维护
+
+完整约定见 [`docs/sandbox-policy.md`](docs/sandbox-policy.md)：`common.nix` 只放通用策略，应用/厂商专属配置放各自模块。
 
 - 新增应用：复制一个模块，`imports = [ ./common.nix ];`，只写差异。
 - `packages.<app>` 都设置了 `meta.mainProgram`，`nix run .#<app>` 可直接启动；新增应用时保持与 `app.binPath` 的可执行文件名一致。
