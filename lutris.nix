@@ -30,7 +30,7 @@
           { sloth, ... }:
           {
             imports = [ ./common.nix ];
-            app.package = pkgs.lutris;
+            app.package = pkgs.lutris-unwrapped;
             app.binPath = "bin/lutris";
 
             flatpak.appId = appId;
