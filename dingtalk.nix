@@ -172,7 +172,7 @@ EOF
       # 钉钉启动后会 kill 掉自己的父进程（脱离终端），直接前台跑会让 nix run 以
       # 137 退出。setsid 后台启动保留，但不再重定向，日志照常输出到终端。
       launcher = pkgs.writeShellScriptBin "dingtalk" ''
-        ${pkgs.util-linux}/bin/setsid ${exePath} "$@" </dev/null &
+        ${pkgs.util-linux}/bin/setsid ${exePath} --ozone-platform=wayland --enable-features=UseOzonePlatform "$@" </dev/null &
       '';
     in
     pkgs.buildEnv {
