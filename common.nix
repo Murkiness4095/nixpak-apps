@@ -133,6 +133,7 @@ if args ? self then { } else {
       bind.ro = with sloth; [
         [ "${pkgs.bashInteractive}/bin/bash" "/bin/sh" ]
         [ "${pkgs.bashInteractive}/bin/bash" "/bin/bash" ]
+        "/etc/os-release"
         "/etc/lsb-release"
         (sloth.concat' sloth.runtimeDir "/doc")
         "/etc/localtime"
