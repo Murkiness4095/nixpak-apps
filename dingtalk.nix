@@ -133,6 +133,7 @@ EOF
             app.package = unwrapped;
             app.binPath = "bin/dingtalk";
             flatpak.appId = appId;
+            dbus.policies."org.freedesktop.StatusNotifierItem-4-1" = "own";
 
             bubblewrap = {
               env = {

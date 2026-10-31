@@ -40,6 +40,7 @@
             app.binPath = "bin/telegram";
 
             flatpak.appId = appId;
+            dbus.policies."org.freedesktop.StatusNotifierItem-6-1" = "own";
 
             bubblewrap = {
 

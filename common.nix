@@ -1,5 +1,9 @@
 # 所有 nixpak 沙盒的公共基础配置。
 #
+# 约定：common 只放“所有应用都成立”的隔离策略。
+# 应用/厂商专属内容（NVIDIA 设备、托盘 SNI、Wine/umu 路径等）放各自应用模块，
+# 避免 common 变成例外集合。
+#
 # 设计目标（隔离优先）：
 #  - 宿主 $HOME / ~/.config / ~/.local/share 默认不可见；应用只能看到显式绑定。
 #  - 不整绑宿主 $XDG_RUNTIME_DIR，只绑定具体 socket（wayland/at-spi/gvfsd/dconf），
@@ -25,7 +29,7 @@ let
 in
 if args ? self then { } else {
   options.nixpakCommon.fileChooser.enable =
-    lib.mkEnableOption "allow FileChooser portal (DingTalk GTK dialog workaround)";
+    lib.mkEnableOption "allow FileChooser portal";
 
   config = {
     fonts.enable = mkDefault false;
@@ -33,7 +37,7 @@ if args ? self then { } else {
     etc.sslCertificates.enable = mkDefault true;
 
     gpu.enable = mkDefault true;
-    gpu.provider = mkDefault "bundle";
+    gpu.provider = mkDefault "nixos";
 
     dbus.enable = mkDefault true;
     dbus.policies = lib.mapAttrs (name: value: mkDefault value) {
@@ -41,14 +45,6 @@ if args ? self then { } else {
       "ca.desrt.dconf" = "talk";
       "org.kde.StatusNotifierWatcher" = "talk";
       "org.freedesktop.StatusNotifierHost" = "own";
-      # Electron 用 org.freedesktop.StatusNotifierItem-<pid>-1；逐 PID 放行（不支持通配符）
-      "org.freedesktop.StatusNotifierItem-2-1" = "own";
-      "org.freedesktop.StatusNotifierItem-4-1" = "own";
-      "org.freedesktop.StatusNotifierItem-5-1" = "own";
-      "org.freedesktop.StatusNotifierItem-6-1" = "own";
-      "org.freedesktop.StatusNotifierItem-8-1" = "own";
-      "org.freedesktop.StatusNotifierItem-9-1" = "own";
-      "org.freedesktop.StatusNotifierItem-10-1" = "own";
       "org.kde.*" = "own";
       "org.freedesktop.portal.Fcitx" = "talk";
       "org.freedesktop.portal.Fcitx.*" = "talk";
@@ -77,7 +73,7 @@ if args ? self then { } else {
         GTK_IM_MODULE = mkDefault "fcitx";
         QT_IM_MODULE = mkDefault "fcitx";
         XMODIFIERS = mkDefault "@im=fcitx";
-        NIXOS_XDG_OPEN_USE_PORTAL = mkDefault "1";
+        LD_LIBRARY_PATH = mkDefault (sloth.concat [ "/run/opengl-driver/lib:/run/opengl-driver-32/lib:" (sloth.envOr "LD_LIBRARY_PATH" "") ]);
         QT_QPA_PLATFORM = mkDefault "wayland";
         ELECTRON_OZONE_PLATFORM_HINT = mkDefault "wayland";
         NIXOS_OZONE_WL = mkDefault "1";
@@ -137,7 +133,6 @@ if args ? self then { } else {
       bind.ro = with sloth; [
         [ "${pkgs.bashInteractive}/bin/bash" "/bin/sh" ]
         [ "${pkgs.bashInteractive}/bin/bash" "/bin/bash" ]
-        "/etc/os-release"
         "/etc/lsb-release"
         (sloth.concat' sloth.runtimeDir "/doc")
         "/etc/localtime"
@@ -166,7 +161,7 @@ if args ? self then { } else {
       sockets = {
         wayland = mkDefault true;
         pipewire = mkDefault true;
-        # 微信/UOS 走 PulseAudio 兼容层；只给 pipewire socket 时语音无声
+        # 部分应用依赖 PulseAudio 兼容层；只给 pipewire socket 时可能无声
         pulse = mkDefault true;
         # 严格 Wayland：不挂任何 X11 socket（nixpak 默认也是 false，这里显式写出）
         x11 = mkDefault false;

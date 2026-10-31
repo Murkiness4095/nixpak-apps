@@ -26,6 +26,7 @@
             app.binPath = "bin/wechat-uos";
 
             flatpak.appId = appId;
+            dbus.policies."org.freedesktop.StatusNotifierItem-10-1" = "own";
 
             bubblewrap = {
               env = {

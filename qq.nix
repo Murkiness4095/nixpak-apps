@@ -110,6 +110,7 @@
             app.binPath = "bin/qq";
             app.package = qqPatched;
             flatpak.appId = appId;
+            dbus.policies."org.freedesktop.StatusNotifierItem-5-1" = "own";
 
             bubblewrap = {
               env = {

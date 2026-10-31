@@ -46,6 +46,7 @@
             app.binPath = "bin/vesktop";
 
             flatpak.appId = appId;
+            dbus.policies."org.freedesktop.StatusNotifierItem-9-1" = "own";
 
             env = {
               # 文件选择器走 GTK，强制深色（不影响 Vesktop 自己的主题设置）

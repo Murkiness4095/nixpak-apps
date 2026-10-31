@@ -48,6 +48,7 @@
             app.binPath = "bin/nheko";
 
             flatpak.appId = appId;
+            dbus.policies."org.freedesktop.StatusNotifierItem-8-1" = "own";
 
             # Nheko 用 libsecret 保存加密密钥；需要访问宿主 Secret Service
             dbus.policies."org.freedesktop.secrets" = "talk";
