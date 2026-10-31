@@ -19,10 +19,10 @@
         ./feishu.nix
         ./telegram.nix
         ./nheko.nix
+        ./vesktop.nix
         ./wechat-uos.nix
         ./heroic.nix
         ./bottles.nix
-        ./vesktop.nix
       ];
     };
 }
