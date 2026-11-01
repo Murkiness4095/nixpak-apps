@@ -51,8 +51,6 @@
                 "/mnt"
                 "/media"
                 "/run/media"
-                # 现有前缀/自定义 Proton 在 home 下，需显式绑定
-                (sloth.concat' sloth.homeDir "/123game")
                 (sloth.concat' sloth.homeDir "/.local/share/Steam/compatibilitytools.d")
                 (sloth.concat' sloth.homeDir "/.steam/steam")
               ];
