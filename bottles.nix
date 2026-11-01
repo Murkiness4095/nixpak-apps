@@ -7,26 +7,6 @@
         inherit system;
         config.allowUnfree = true;
       };
-      # 6 个 PID 占位 → 应用 pid 7 → 托盘名 -7-1
-      bottlesLauncher = pkgs.runCommandLocal "bottles-launcher" { } ''
-        mkdir -p $out/bin
-        cat > $out/bin/bottles <<EOF
-        #!${pkgs.runtimeShell}
-        ${pkgs.coreutils}/bin/sleep 2147483647 & s1=\$!
-        ${pkgs.coreutils}/bin/sleep 2147483647 & s2=\$!
-        ${pkgs.coreutils}/bin/sleep 2147483647 & s3=\$!
-        ${pkgs.coreutils}/bin/sleep 2147483647 & s4=\$!
-        ${pkgs.coreutils}/bin/sleep 2147483647 & s5=\$!
-        ${pkgs.coreutils}/bin/sleep 2147483647 & s6=\$!
-        ${pkgs.bottles-unwrapped}/bin/bottles "\$@" & app=\$!
-        wait \$app
-        rc=\$?
-        kill \$s1 \$s2 \$s3 \$s4 \$s5 \$s6 2>/dev/null
-        exit \$rc
-        EOF
-        chmod +x $out/bin/bottles
-      '';
-
       mkNixPak = inputs.nixpak.lib.nixpak {
         inherit pkgs;
         inherit (pkgs) lib;
@@ -41,11 +21,9 @@
           { sloth, ... }:
           {
             imports = [ ./common.nix ];
-            app.package = bottlesLauncher;
+            app.package = pkgs.bottles-unwrapped;
             app.binPath = "bin/bottles";
 
-            # Bottles 自身托盘：pid 7 → -7-1（仅本模块放行，不改 common）
-            dbus.policies."org.freedesktop.StatusNotifierItem-7-1" = "own";
             dbus.policies."com.usebottles.bottles" = "own";
             dbus.policies."com.usebottles.*" = "own";
 
