@@ -40,6 +40,7 @@
 |---|---|
 | 托盘 `StatusNotifierItem-<pid>-1` | 各应用模块 |
 | Bottles D-Bus 名称 | `bottles.nix` |
+| NVIDIA `/dev/nvidia*` | `heroic.nix`、`bottles.nix` |
 | `/etc/zoneinfo`、`/run/opengl-driver-32` | Wine 相关模块 |
 | `umu-launcher` store path | `bottles.nix` |
 
