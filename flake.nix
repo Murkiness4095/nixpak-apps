@@ -8,23 +8,7 @@
     nixpak.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, ... }@inputs:
-    let
-      nixpakOverlay = final: prev:
-        if final.stdenv.hostPlatform.isLinux
-        then { nixpakApps = self.packages.${final.stdenv.hostPlatform.system}; }
-        else { nixpakApps = { }; };
-
-      nixpakNixosModule = { pkgs, lib, ... }: {
-        environment.systemPackages = lib.optionals pkgs.stdenv.hostPlatform.isLinux
-          (builtins.attrValues self.packages.${pkgs.stdenv.hostPlatform.system});
-      };
-
-      nixpakHomeModule = { pkgs, lib, ... }: {
-        home.packages = lib.optionals pkgs.stdenv.hostPlatform.isLinux
-          (builtins.attrValues self.packages.${pkgs.stdenv.hostPlatform.system});
-      };
-    in
+  outputs = inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" "aarch64-linux" ];
       imports = [
@@ -41,15 +25,14 @@
         ./bottles.nix
       ];
 
-      flake = {
-        overlays.default = nixpakOverlay;
-        nixosModules.default = nixpakNixosModule;
-        homeManagerModules.default = nixpakHomeModule;
-
-        lib.nixpak = {
-          common = ./common.nix;
-          fonts = ./lib/fonts.nix;
-        };
+      # 消费者直接引用包，不走 overlay（overlay 会和 nixpkgs 本身形成循环）：
+      #   inputs.nixpak-apps.packages.${pkgs.stdenv.hostPlatform.system}.wechat
+      # 或用 let 绑定别名：
+      #   let nixpakApps = inputs.nixpak-apps.packages.${pkgs.stdenv.hostPlatform.system}; in ...
+      # 自定义沙盒应用可复用 common / 字体模块：
+      flake.lib.nixpak = {
+        common = ./common.nix;
+        fonts = ./lib/fonts.nix;
       };
     };
 }

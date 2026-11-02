@@ -99,37 +99,34 @@ inputs.nixpak-apps.inputs.nixpkgs.follows = "nixpkgs";
 
 `follows` 可选但推荐：写了就版本统一，不写就用 nixpak-apps 自己的 nixpkgs。
 
-### Overlay（推荐）
+直接引用包（推荐，无循环）：
 
 ```nix
-nixpkgs.overlays = [ inputs.nixpak-apps.overlays.default ];
+let
+  nixpakApps = inputs.nixpak-apps.packages.${pkgs.stdenv.hostPlatform.system};
+in
+{
+  environment.systemPackages = [
+    nixpakApps.wechat
+    nixpakApps.qq
+    nixpakApps.dingtalk
+  ];
+}
 ```
 
-所有沙盒应用在 `pkgs.nixpakApps` 下：
+或用 `with` 缩短：
 
 ```nix
-# hjem
-hjem.users.${user}.packages = [
-  pkgs.nixpakApps.wechat
-  pkgs.nixpakApps.qq
-  pkgs.nixpakApps.dingtalk
+environment.systemPackages = with nixpakApps; [
+  wechat qq dingtalk feishu telegram nheko vesktop wechat-uos
 ];
-
-# NixOS
-environment.systemPackages = [ pkgs.nixpakApps.wechat ];
 ```
 
-### Modules
+hjem / Home Manager 用户同样把包放进 `hjem.users.${user}.packages` / `home.packages` 即可。
 
-```nix
-imports = [ inputs.nixpak-apps.nixosModules.default ];       # environment.systemPackages
-# Home Manager 用户：
-imports = [ inputs.nixpak-apps.homeManagerModules.default ]; # home.packages
-```
+> 不要用 overlay：这些包本身就是从 nixpkgs 构建的，overlay 会和 nixpkgs 形成无限递归。`let` 绑定是最干净的写法。
 
-模块在非 Linux 上为空操作，Darwin 不会报错。
-
-### 自定义沙盒应用
+自定义沙盒应用可复用 common / 字体模块：
 
 ```nix
 common = inputs.nixpak-apps.lib.nixpak.common;
@@ -138,4 +135,3 @@ fonts  = inputs.nixpak-apps.lib.nixpak.fonts;
 
 `common.nix` 和 `lib/fonts.nix` 已带递归扫描守卫，可安全被 flake-parts 自动 import。
 
-> 沙盒应用只支持 Linux（`x86_64-linux` / `aarch64-linux`）；Darwin 上 `nixpakApps` 为空，不会报错。
