@@ -102,6 +102,7 @@ let
       };
 
       # 覆盖宿主 GTK 字体设置：钉钉自带 Pango 读不了 LXGW，用 Noto CJK
+      # （不能继承宿主 GTK_THEME：它的 GTK 版本老，宿主主题无法正常渲染）
       gtkSettings = pkgs.writeTextDir "settings.ini" ''
         [Settings]
         gtk-font-name=Noto Sans CJK SC 11

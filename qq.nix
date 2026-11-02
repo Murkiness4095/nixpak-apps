@@ -18,7 +18,6 @@
 
       # 全部文字（中英文、数字）统一用 霞鹜文楷 Screen；
       # QQ 自带 @font-face 字体：数字走 resources/app/resource/fonts/AppleColorEmoji.ttf
-      # （该字体带 ASCII 数字，一格一个，日期/群人数/QQ 号全变“破数字”）。
       # 用符号链接树重建包，只覆盖 fonts 目录：emoji 换成去掉 ASCII 的版本，
       # DIN 数字字体换成霞鹜文楷，其余文件全部软链回原包。bin/qq 包装脚本
       # 里的绝对路径一并改写到新包。
@@ -114,8 +113,9 @@
 
             bubblewrap = {
               env = {
-                GTK_THEME = "Adwaita:dark";
-                GTK_APPLICATION_PREFER_DARK_THEME = "1";
+                # 继承宿主 GTK 主题偏好，缺省时用深色
+                GTK_THEME = sloth.envOr "GTK_THEME" "Adwaita:dark";
+                GTK_APPLICATION_PREFER_DARK_THEME = sloth.envOr "GTK_APPLICATION_PREFER_DARK_THEME" "1";
               };
 
               bind.dev = [

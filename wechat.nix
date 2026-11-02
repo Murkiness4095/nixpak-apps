@@ -31,8 +31,8 @@
             bubblewrap = {
 
               env = {
-                GTK_THEME = "Adwaita:dark";
-                GTK_APPLICATION_PREFER_DARK_THEME = "1";
+                # 微信文件选择器是 Qt 原生对话框，GTK_THEME 无效；仅 inherited GTK 偏好
+                GTK_APPLICATION_PREFER_DARK_THEME = sloth.envOr "GTK_APPLICATION_PREFER_DARK_THEME" "1";
                 GTK_USE_PORTAL = "0"; # 使用沙盒内原生文件对话框，避免 portal 暴露宿主路径
                 QT_QPA_PLATFORMTHEME = ""; # 禁用 xdgdesktopportal 主题，避免 Qt 走 portal 文件选择器
               };
