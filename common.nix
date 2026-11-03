@@ -77,6 +77,8 @@ if args ? self then { } else {
         QT_QPA_PLATFORM = mkDefault "wayland";
         ELECTRON_OZONE_PLATFORM_HINT = mkDefault "wayland";
         NIXOS_OZONE_WL = mkDefault "1";
+        # 让 xdg-open 走 portal，避免在沙盒内直接 exec 宿主 PATH 里的浏览器
+        NIXOS_XDG_OPEN_USE_PORTAL = mkDefault "1";
         PATH = mkDefault (
           sloth.concat [
             "${pkgs.xdg-utils}/bin:${pkgs.coreutils}/bin:${pkgs.bashInteractive}/bin:${pkgs.gnused}/bin:${pkgs.gnugrep}/bin:${pkgs.findutils}/bin:${pkgs.procps}/bin:${pkgs.glibc.bin}/bin:"
