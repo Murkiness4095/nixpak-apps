@@ -2,12 +2,6 @@
 let
   mkPatched =
     { pkgs, unwrapped }:
-    let
-      appVersion = lib.removeSuffix "\n" (
-        builtins.readFile "${unwrapped}/opt/apps/com.alibabainc.dingtalk/files/version"
-      );
-      appDir = "${unwrapped}/opt/apps/com.alibabainc.dingtalk/files/${appVersion}";
-    in
     pkgs.runCommandLocal "dingtalk-font-patched" {
       nativeBuildInputs = [
         pkgs.makeWrapper
@@ -15,6 +9,10 @@ let
       ];
     } ''
       src=${unwrapped}
+      # Read vendor metadata while building, not during flake evaluation.
+      # A dry evaluation must not need to realise the ARM application first.
+      appVersion=$(cat "$src/opt/apps/com.alibabainc.dingtalk/files/version")
+      appDir="$src/opt/apps/com.alibabainc.dingtalk/files/$appVersion"
       rsrc=$out/opt/apps/com.alibabainc.dingtalk
       clone_except() {
         s=$1; d=$2; skip=$3
@@ -32,23 +30,23 @@ let
       clone_except "$src/opt" "$out/opt" apps
       clone_except "$src/opt/apps" "$out/opt/apps" com.alibabainc.dingtalk
       clone_except "$src/opt/apps/com.alibabainc.dingtalk" "$rsrc" files
-      clone_except "$src/opt/apps/com.alibabainc.dingtalk/files" "$rsrc/files" ${appVersion}
-      clone_except "$src/opt/apps/com.alibabainc.dingtalk/files/${appVersion}" "$rsrc/files/${appVersion}" Resources
-      clone_except "$src/opt/apps/com.alibabainc.dingtalk/files/${appVersion}/Resources" "$rsrc/files/${appVersion}/Resources" fonts
-      clone_except "$src/opt/apps/com.alibabainc.dingtalk/files/${appVersion}/Resources/fonts" "$rsrc/files/${appVersion}/Resources/fonts" ""
+      clone_except "$src/opt/apps/com.alibabainc.dingtalk/files" "$rsrc/files" "$appVersion"
+      clone_except "$src/opt/apps/com.alibabainc.dingtalk/files/$appVersion" "$rsrc/files/$appVersion" Resources
+      clone_except "$src/opt/apps/com.alibabainc.dingtalk/files/$appVersion/Resources" "$rsrc/files/$appVersion/Resources" fonts
+      clone_except "$src/opt/apps/com.alibabainc.dingtalk/files/$appVersion/Resources/fonts" "$rsrc/files/$appVersion/Resources/fonts" ""
 
       # 官方 UI 正文字体 = Alibaba PuHuiTi 3.0（regular.otf），直接换成霞鹜文楷。
       # Qt 原生窗口按族名 "Alibaba PuHuiTi 3.0" 查找，映射交给沙盒 fontconfig
       # 的 alias（见 dtFonts）；改字体 name 表会导致 Qt 崩溃，不用。
-      fonts=$rsrc/files/${appVersion}/Resources/fonts
+      fonts=$rsrc/files/$appVersion/Resources/fonts
       rm "$fonts/regular.otf"
       cp ${(import ./lib/fonts.nix { inherit pkgs; }).primaryFile} "$fonts/regular.otf"
 
       # 主程序必须是实体文件，否则 /proc/self/exe 会指回原包，Resources 也回原包
-      appdir=$rsrc/files/${appVersion}
+      appdir=$rsrc/files/$appVersion
       rm "$appdir/com.alibabainc.dingtalk" "$appdir/dingtalk_shell"
-      cp "${appDir}/com.alibabainc.dingtalk" "$appdir/com.alibabainc.dingtalk"
-      cp "${appDir}/dingtalk_shell" "$appdir/dingtalk_shell"
+      cp "$appDir/com.alibabainc.dingtalk" "$appdir/com.alibabainc.dingtalk"
+      cp "$appDir/dingtalk_shell" "$appdir/dingtalk_shell"
       chmod +x "$appdir/com.alibabainc.dingtalk" "$appdir/dingtalk_shell"
 
       mkdir -p $out/bin
