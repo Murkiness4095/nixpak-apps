@@ -132,9 +132,14 @@ let
         libGLU
         libxmu
         libXt
-        gtk2 # doctor 与随包 gtkglext 栈（libpangox-1.0 无 nix 包，仍保持忽略）
       ];
 
+      # gtk2 不列入 buildInputs：nixpkgs 已标记 gtk2 broken（NixOS 27.05 移除，见
+      # nixpkgs#410814），引用即无法求值。官方包里只有可选的 doctor 诊断工具和
+      # 它依赖的随包 gtkglext 栈（libpangox-1.0 无 nix 包）NEEDED libgtk-x11-2.0；
+      # 主程序与 dingtalk_shell 只用 gtk3，doctor 之外无任何 ELF 引用 gtkglext。
+      # doctor 的缺失依赖由下面的 ignoreMissingDeps 忽略。
+      #
       # 随包库之间互相引用的裸 soname（libcef.so、libQt5*、libavcodec 等）不在
       # nix 的库里，跳过这些告警；运行期由 $ORIGIN（应用目录）兜底解析。
       autoPatchelfIgnoreMissingDeps = true;
